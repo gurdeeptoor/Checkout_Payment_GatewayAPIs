@@ -9,6 +9,14 @@ namespace Checkout.PaymentGatway.Tests
         {
         }
 
+        /* 
+         1 - Authentication
+           - Invalid Key, Valid Key, Blank Key, Other Merchant Key
+         2 - POST Payment
+           - Invalid, Valid
+         3 - GET Payment
+           - Invalid, Valid
+         */
         [Test]
         public void Test1()
         {
