@@ -31,7 +31,7 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{0}")]
+        [Route("transactionRef")]
         public async Task<IActionResult> GetTransaction([FromRoute] Guid transactionRef)
         {
             return Ok();
