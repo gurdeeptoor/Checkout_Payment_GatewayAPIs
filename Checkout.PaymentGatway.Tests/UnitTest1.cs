@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Checkout.PaymentGatway.Tests
+namespace Checkout.PaymentGatway.UnitTests
 {
     public class Tests
     {
