@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGateway.WebAPI", "Checkout.PaymentGateway.WebAPI\Checkout.PaymentGateway.WebAPI.csproj", "{6328C3AA-3823-4EBF-BA53-49ACDECF06A3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.MockBank.Core", "Checkout.MockBank\Checkout.MockBank.Core.csproj", "{626EC4E7-9901-4B9A-A1CE-3DE6E791D401}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.Tests", "Checkout.PaymentGatway.Tests\Checkout.PaymentGatway.Tests.csproj", "{78F15D9B-5D09-412A-9F79-A44DEB4A3225}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.Marchat.Client", "Checkout.Marchat.Client\Checkout.Marchat.Client.csproj", "{8F2ED115-8EE2-409F-80F2-2443BC78ECDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Checkout.PaymentGateway.Data", "Checkout.PaymentGateway.Data\Checkout.PaymentGateway.Data.csproj", "{8618964C-E766-4F0D-81BC-A2F99810AB14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGateway.Data", "Checkout.PaymentGateway.Data\Checkout.PaymentGateway.Data.csproj", "{8618964C-E766-4F0D-81BC-A2F99810AB14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Checkout.MockBank.WebAPI", "Checkout.MockBank.WebAPI\Checkout.MockBank.WebAPI.csproj", "{1893D71E-98B3-4F89-97D3-00C4BEE86016}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{6328C3AA-3823-4EBF-BA53-49ACDECF06A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6328C3AA-3823-4EBF-BA53-49ACDECF06A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6328C3AA-3823-4EBF-BA53-49ACDECF06A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{626EC4E7-9901-4B9A-A1CE-3DE6E791D401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{626EC4E7-9901-4B9A-A1CE-3DE6E791D401}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{626EC4E7-9901-4B9A-A1CE-3DE6E791D401}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{626EC4E7-9901-4B9A-A1CE-3DE6E791D401}.Release|Any CPU.Build.0 = Release|Any CPU
 		{78F15D9B-5D09-412A-9F79-A44DEB4A3225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{78F15D9B-5D09-412A-9F79-A44DEB4A3225}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F15D9B-5D09-412A-9F79-A44DEB4A3225}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{8618964C-E766-4F0D-81BC-A2F99810AB14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8618964C-E766-4F0D-81BC-A2F99810AB14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8618964C-E766-4F0D-81BC-A2F99810AB14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 using System;
 
-namespace Checkout.PaymentGateway.WebAPI
+namespace Checkout.MockBank.WebAPI
 {
     public class WeatherForecast
     {
