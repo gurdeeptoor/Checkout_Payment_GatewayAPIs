@@ -20,12 +20,12 @@ namespace Checkout.MockBank.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Add")]
+        [Route("Payment")]
         public async Task<IActionResult> PostBankTransaction([FromBody] BankTransactionRequest BankTransactionRequest)
         {
 
             BankTransactionStatusCode statusCode = BankTransactionStatusCode.Failed;
-            string supplymentaryInfo = "OK";
+            string supplymentaryInfo = string.Empty;
 
             MockBankData MockBankData = new MockBankData();
 
@@ -42,12 +42,13 @@ namespace Checkout.MockBank.WebAPI.Controllers
             else if (CardDetails.ExpYear < DateTime.Now.Year || (CardDetails.ExpYear == DateTime.Now.Year && CardDetails.ExpMonth < DateTime.Now.Month))            
                 supplymentaryInfo = "Card expired";          
             else if (CardDetails.RemainingBalance < BankTransactionRequest.Amount)  
-                supplymentaryInfo = "Insuffiecnt funds";            
+                supplymentaryInfo = "Insufficent funds";            
             else
             {
                 statusCode = BankTransactionStatusCode.Sucessful;
                 //Internal Bank Payment processing goes here 
                 CardDetails.RemainingBalance -= BankTransactionRequest.Amount;
+                supplymentaryInfo = "Payment Sucessful";
             }
 
             var x = new BankTransactionRespose()

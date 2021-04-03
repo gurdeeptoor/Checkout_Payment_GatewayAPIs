@@ -9,7 +9,7 @@ namespace Checkout.PaymentGatway.Core
 {
     public class MerchantRepository : Repository<Merchant>, IMerchantRepository
     {
-        CheckOutDBContext _checkOutDBContext;
+        private CheckOutDBContext _checkOutDBContext;
 
         public MerchantRepository(CheckOutDBContext checkOutDBContext) : base(checkOutDBContext)
         {

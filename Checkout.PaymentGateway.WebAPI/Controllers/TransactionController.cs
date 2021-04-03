@@ -27,6 +27,7 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
         [Route("Add")]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionRequest transactionRequest)
         {
+            //Validate the transaction 
             return Ok();
         }
 
