@@ -24,7 +24,7 @@ namespace Checkout.MockBank.WebAPI.Controllers
         public async Task<IActionResult> PostBankTransaction([FromBody] BankTransactionRequest BankTransactionRequest)
         {
 
-            BankTransactionStatusCode statusCode;
+            BankTransactionStatusCode statusCode = BankTransactionStatusCode.Failed;
             string supplymentaryInfo = "OK";
 
             MockBankData MockBankData = new MockBankData();
@@ -35,30 +35,18 @@ namespace Checkout.MockBank.WebAPI.Controllers
                                                                           x.HolderName == BankTransactionRequest.HolderName &&
                                                                           x.ExpYear == BankTransactionRequest.ExpYear);
 
-            if (CardDetails == null)
-            {
-                statusCode = BankTransactionStatusCode.Failed;
-                supplymentaryInfo = "Invalid Card Details";
-            }
-            else if (!CardDetails.IsActivated)
-            {
-                statusCode = BankTransactionStatusCode.Failed;
-                supplymentaryInfo = "Card not activated";
-            }
-            else if (CardDetails.ExpYear < DateTime.Now.Year || (CardDetails.ExpYear == DateTime.Now.Year && CardDetails.ExpMonth < DateTime.Now.Month))
-            {
-                statusCode = BankTransactionStatusCode.Failed;
-                supplymentaryInfo = "Card expired";
-            }
-            else if (CardDetails.RemainingBalance < BankTransactionRequest.Amount)
-            {
-                statusCode = BankTransactionStatusCode.Failed;
-                supplymentaryInfo = "Insuffiecnt funds";
-            }
+            if (CardDetails == null)           
+                supplymentaryInfo = "Invalid Card Details";           
+            else if (!CardDetails.IsActivated)            
+                supplymentaryInfo = "Card not activated";          
+            else if (CardDetails.ExpYear < DateTime.Now.Year || (CardDetails.ExpYear == DateTime.Now.Year && CardDetails.ExpMonth < DateTime.Now.Month))            
+                supplymentaryInfo = "Card expired";          
+            else if (CardDetails.RemainingBalance < BankTransactionRequest.Amount)  
+                supplymentaryInfo = "Insuffiecnt funds";            
             else
             {
-                //Process payment here
                 statusCode = BankTransactionStatusCode.Sucessful;
+                //Internal Bank Payment processing goes here 
                 CardDetails.RemainingBalance -= BankTransactionRequest.Amount;
             }
 
@@ -70,7 +58,7 @@ namespace Checkout.MockBank.WebAPI.Controllers
             };
 
             if (statusCode == BankTransactionStatusCode.Sucessful)
-                return Ok(x);
+                return Created(string.Empty, x);
             else
                 return BadRequest(x);
         }
