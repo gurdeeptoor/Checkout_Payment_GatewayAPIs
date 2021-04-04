@@ -22,6 +22,5 @@ namespace Checkout.PaymentGateway.WebAPI
         public string Currency { get; set; }
         public string Status { get; set; }
         public string AuthCode { get; set; }
-        public ErrorDetails Error { get; set; }
     }
 }

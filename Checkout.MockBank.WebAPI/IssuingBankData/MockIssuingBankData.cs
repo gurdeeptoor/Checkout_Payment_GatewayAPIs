@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace Checkout.MockBank.WebAPI
 {
-    public class MockBankData
+    /// <summary>
+    /// This is mock data held at Card Issuing Bank. The Aquiring Bank will check using the Issuing Bank network via Payment Scheme. 
+    /// In Real life this will be done via Scheme system but for Mock purposes the static data is used
+    /// </summary>
+    public class MockIssuingBankData
     {
         public class BankCard 
         {
@@ -16,51 +20,53 @@ namespace Checkout.MockBank.WebAPI
             public string HolderName { get; set; }
             public string Cvv { get; set; }
             public bool IsActivated { get; set; }
-        }
 
+            //Address details ommitted for brevity 
+        }
+         
         /// <summary>
-        /// Returns the Mock Data for Bank Cards
+        /// Returns the Mock Data for Bank Cards held at Issuing Bank
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<BankCard> MockBankCards()
+        public IEnumerable<BankCard> MockIssuingBankCards()
         {
-            IEnumerable<BankCard> BankCards = Enumerable.Empty<BankCard>();
+            List<BankCard> BankCards = new List<BankCard>();
 
-            BankCards.Append(new BankCard
+            BankCards.Add(new BankCard
             {
                 //Active Card - Can be used for payments
-                CardNum = "",
+                CardNum = "4953089013607",
                 Cvv = "122",
                 ExpMonth = 12,
-                ExpYear = 2021,
+                ExpYear = 21,
                 HolderName = "Mr Checkout 1",
                 IsActivated = true,
                 RemainingBalance = 1500
             });
-            BankCards.Append(new BankCard
+            BankCards.Add(new BankCard
             {
                 //Used Card - Over Credit Limit - below zero balance
-                CardNum = "",
+                CardNum = "373485467448025",
                 Cvv = "222",
                 ExpMonth = 6,
-                ExpYear = 2023,
+                ExpYear = 23,
                 HolderName = "Mrs Checkout 2",
                 IsActivated = true,
                 RemainingBalance = (decimal)-10.50
             });
-            BankCards.Append(new BankCard
+            BankCards.Add(new BankCard
             {
                 //Starter Card - not activated yet (IsEabled = false)
-                CardNum = "",
+                CardNum = "5201294442453002",
                 Cvv = "322",
                 ExpMonth = 1,
-                ExpYear = 2025,
+                ExpYear = 25,
                 HolderName = "Miss Checkout 3",
                 IsActivated = false,
                 RemainingBalance = 1000
             });
 
-            return BankCards;
+            return BankCards.AsEnumerable();
         }
     }
 }

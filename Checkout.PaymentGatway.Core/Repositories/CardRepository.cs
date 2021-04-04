@@ -1,4 +1,5 @@
 ﻿using Checkout.PaymentGateway.Data;
+using CheckOut.Common;
 using CreditCardValidator;
 using System;
 
@@ -15,10 +16,10 @@ namespace Checkout.PaymentGatway.Core
         public bool IsCardValid(string CardNumber, int ExpMonth, int ExpYear)
         {
             //check if exp date & Year are correct
-            if (ExpYear < DateTime.Now.Year || (ExpYear == DateTime.Now.Year && ExpMonth < DateTime.Now.Month))
+            if (ExpYear.To2DigitYear() < DateTime.Now.Year.To2DigitYear() || (ExpYear.To2DigitYear() == DateTime.Now.Year.To2DigitYear() && ExpMonth < DateTime.Now.Month))
                 return false;
-             
-            //Check if number is valid using NuGet
+
+            //Check if number is valid using NuGet CreditCardValidator package
             CreditCardDetector detector = new CreditCardDetector(CardNumber);
             return detector.IsValid();
         }

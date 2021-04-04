@@ -27,7 +27,28 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
         [Route("Add")]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionRequest transactionRequest)
         {
-            //Validate the transaction 
+            //Validate Transaction request  
+            if (transactionRequest == null || !ModelState.IsValid)
+                return BadRequest("Invalid Transaction Parameters");
+
+            //Validate Merchant
+            var MerchantAPIKey = "57Dw2tFq9wF6"; //TODO - Get this from Auth Handler based on the API Key
+
+            var Merchant = _unitOfWork.Merchants.GetMerchantByKey(MerchantAPIKey);
+            if (Merchant == null)
+                return BadRequest("Invalid Merchant details");
+
+            //Validate Card
+            if (!_unitOfWork.Cards.IsCardValid(transactionRequest.CardNumber, transactionRequest.ExpMonth, transactionRequest.ExpYear))
+                return BadRequest("Invalid Card details");
+
+            //Validate Currency
+            if (!_unitOfWork.Currencies.IsCurrenyValid(transactionRequest.CurrencyCode))
+                return BadRequest("Invalid Currency");
+
+            //Process Bank Transactions
+            //Make Bank API Call via Repository
+
             return Ok();
         }
 

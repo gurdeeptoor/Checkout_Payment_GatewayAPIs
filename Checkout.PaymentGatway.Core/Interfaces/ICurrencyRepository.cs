@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Checkout.PaymentGatway.Core
-{    public interface ITransactionRepository : IRepository<Transaction>
+{
+    public interface ICurrencyRepository : IRepository<Currency>
     {
-        Transaction GetTrasactionByRef(string RefNo);
+        bool IsCurrenyValid(string CurrencyCode);
     }
 }

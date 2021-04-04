@@ -11,7 +11,8 @@ namespace CheckOut.Common
         public int ExpYear { get; set; }
         public string HolderName { get; set; }
         public string Cvv { get; set; }
-        public decimal Amount { get; set; }
+        public decimal Amount { get; set; } 
         public string MerchantRef { get; set; }
+        public string PaymentGatewayRef { get; set; }
     }
 }

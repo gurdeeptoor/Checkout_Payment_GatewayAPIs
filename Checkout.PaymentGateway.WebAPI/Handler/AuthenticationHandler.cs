@@ -28,15 +28,12 @@ namespace Checkout.PaymentGateway.WebAPI
             if (!Request.Headers.ContainsKey("X-API-KEY"))
                 return AuthenticateResult.Fail("Invalid header");
 
-            var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["X-API-KEY"]);
-            //var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-            //var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
-            //var ApiKeyVal = credentials[0];
-
+            var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["X-API-KEY"]);           
             var merChant = _merchantRepository.GetMerchantByKey(authHeader.Scheme);
 
             if (merChant != null)
             {
+                //Save Merchant ref as claim so it can be used in the application later if needed
                 var claims = new[] { new Claim(ClaimTypes.Name, merChant.MerchantRef.ToString()) };
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);

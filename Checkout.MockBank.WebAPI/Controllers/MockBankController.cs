@@ -19,49 +19,55 @@ namespace Checkout.MockBank.WebAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Payment")]
         public async Task<IActionResult> PostBankTransaction([FromBody] BankTransactionRequest BankTransactionRequest)
         {
 
-            BankTransactionStatusCode statusCode = BankTransactionStatusCode.Failed;
-            string supplymentaryInfo = string.Empty;
+            TransactionStatusCode statusCode = TransactionStatusCode.Failed;
+            TransactionReasonCode reasonCode = TransactionReasonCode.None;
+            string authCode = string.Empty;
 
-            MockBankData MockBankData = new MockBankData();
+            MockIssuingBankData MockBankData = new MockIssuingBankData();
 
-            var CardDetails = MockBankData.MockBankCards().FirstOrDefault(x => x.CardNum == BankTransactionRequest.CardNum &&
+            //Card Basic validations ommitted for brevity as for this solution the validation are done at Payment Gateway
+
+            //Call Scheme system and get data from Issuing Bank
+            var CardDetails = MockBankData.MockIssuingBankCards().FirstOrDefault(x => x.CardNum == BankTransactionRequest.CardNum &&
                                                                           x.Cvv == BankTransactionRequest.Cvv &&
                                                                           x.ExpMonth == BankTransactionRequest.ExpMonth &&
                                                                           x.HolderName == BankTransactionRequest.HolderName &&
                                                                           x.ExpYear == BankTransactionRequest.ExpYear);
 
-            if (CardDetails == null)           
-                supplymentaryInfo = "Invalid Card Details";           
-            else if (!CardDetails.IsActivated)            
-                supplymentaryInfo = "Card not activated";          
-            else if (CardDetails.ExpYear < DateTime.Now.Year || (CardDetails.ExpYear == DateTime.Now.Year && CardDetails.ExpMonth < DateTime.Now.Month))            
-                supplymentaryInfo = "Card expired";          
-            else if (CardDetails.RemainingBalance < BankTransactionRequest.Amount)  
-                supplymentaryInfo = "Insufficent funds";            
+            if (CardDetails == null)
+                reasonCode = TransactionReasonCode.InvalidCardDetails;
+            else if (!CardDetails.IsActivated)
+                reasonCode = TransactionReasonCode.CardNotActivated;
+            else if (CardDetails.ExpYear.To2DigitYear() < DateTime.Now.Year.To2DigitYear() || (CardDetails.ExpYear.To2DigitYear() == DateTime.Now.Year.To2DigitYear() && CardDetails.ExpMonth < DateTime.Now.Month))
+                reasonCode = TransactionReasonCode.CardExpired;
+            else if (CardDetails.RemainingBalance < BankTransactionRequest.Amount)
+                reasonCode = TransactionReasonCode.InsufficentFnds;
             else
             {
-                statusCode = BankTransactionStatusCode.Sucessful;
-                //Internal Bank Payment processing goes here 
+                statusCode = TransactionStatusCode.Sucessful;
+                //Other internal Bank Payment processing logic goes here 
                 CardDetails.RemainingBalance -= BankTransactionRequest.Amount;
-                supplymentaryInfo = "Payment Sucessful";
+                reasonCode = TransactionReasonCode.PaymentOK;
+                authCode = "AUTH001";
             }
 
-            var x = new BankTransactionRespose()
+            var bankResponse = new BankTransactionRespose()
             {
                 BankRef = Guid.NewGuid(),
-                StatusCode = statusCode,
-                SupplymentaryInfo = supplymentaryInfo
+                StatusCode = statusCode.ToString(),
+                ReasonCode = reasonCode.ToString(),
+               AuthCode = authCode
             };
 
-            if (statusCode == BankTransactionStatusCode.Sucessful)
-                return Created(string.Empty, x);
+            if (statusCode == TransactionStatusCode.Sucessful)
+                return Created(string.Empty, bankResponse);
             else
-                return BadRequest(x);
+                return BadRequest(bankResponse);
         }
     }
 }
