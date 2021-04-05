@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Checkout.PaymentGatway.Core
+namespace Checkout.PaymentGateway.Core
 {
     public interface IMerchantRepository : IRepository<Merchant>
     {

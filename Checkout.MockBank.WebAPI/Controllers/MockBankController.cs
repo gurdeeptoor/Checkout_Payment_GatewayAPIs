@@ -56,7 +56,7 @@ namespace Checkout.MockBank.WebAPI.Controllers
                 authCode = "AUTH001";
             }
 
-            var bankResponse = new BankTransactionRespose()
+            var bankResponse = new BankTransactionResponse()
             {
                 BankRef = Guid.NewGuid(),
                 StatusCode = statusCode.ToString(),

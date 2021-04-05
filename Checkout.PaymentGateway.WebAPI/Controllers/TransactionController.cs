@@ -1,4 +1,5 @@
-﻿using Checkout.PaymentGatway.Core;
+﻿using Checkout.PaymentGateway.Core;
+using Checkout.PaymentGateway.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -47,8 +48,16 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
                 return BadRequest("Invalid Currency");
 
             //Process Bank Transactions
-            //Make Bank API Call via Repository
+            var Trans = new Transaction
+            {
 
+            };
+            //Make Bank API Call via Repository
+            var Transaction = await _unitOfWork.Transactions.ProcessAquiringBankTrasactionAsync(Trans);
+
+            //Update the Transaction in DB
+
+            //Send Response to Merchant
             return Ok();
         }
 

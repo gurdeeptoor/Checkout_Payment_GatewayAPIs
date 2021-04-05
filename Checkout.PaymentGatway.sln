@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.Core", "Checkout.PaymentGatway.Core\Checkout.PaymentGatway.Core.csproj", "{2BE873DD-3C39-4715-9C78-2BE15BEF210D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGateway.Core", "Checkout.PaymentGatway.Core\Checkout.PaymentGateway.Core.csproj", "{2BE873DD-3C39-4715-9C78-2BE15BEF210D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGateway.WebAPI", "Checkout.PaymentGateway.WebAPI\Checkout.PaymentGateway.WebAPI.csproj", "{6328C3AA-3823-4EBF-BA53-49ACDECF06A3}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.UnitTests", "Checkout.PaymentGatway.UnitTests\Checkout.PaymentGatway.UnitTests.csproj", "{26F3C6A9-98AB-4131-8860-701DAF2B275F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckOut.Common", "CheckOut.Common\CheckOut.Common.csproj", "{0454623E-CD11-4898-A6EA-498D6F77CFA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckOut.Common", "CheckOut.Common\CheckOut.Common.csproj", "{0454623E-CD11-4898-A6EA-498D6F77CFA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

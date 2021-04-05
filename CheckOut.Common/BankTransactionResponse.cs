@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CheckOut.Common
 {
-    public class BankTransactionRespose
+    public class BankTransactionResponse
     {
         public Guid BankRef { get; set; }
         public string StatusCode { get; set; }

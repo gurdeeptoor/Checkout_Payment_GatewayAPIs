@@ -3,7 +3,7 @@ using CheckOut.Common;
 using CreditCardValidator;
 using System;
 
-namespace Checkout.PaymentGatway.Core
+namespace Checkout.PaymentGateway.Core
 {
     public class CardRepository : Repository<CardDetail>, ICardRepository
     {
@@ -19,6 +19,8 @@ namespace Checkout.PaymentGatway.Core
             if (ExpYear.To2DigitYear() < DateTime.Now.Year.To2DigitYear() || (ExpYear.To2DigitYear() == DateTime.Now.Year.To2DigitYear() && ExpMonth < DateTime.Now.Month))
                 return false;
 
+            if (!Int64.TryParse(CardNumber.Trim(), out var x))
+                return false;
             //Check if number is valid using NuGet CreditCardValidator package
             CreditCardDetector detector = new CreditCardDetector(CardNumber);
             return detector.IsValid();

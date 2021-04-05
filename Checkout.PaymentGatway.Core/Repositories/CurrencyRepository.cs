@@ -4,7 +4,7 @@ using CreditCardValidator;
 using System;
 using System.Linq;
 
-namespace Checkout.PaymentGatway.Core
+namespace Checkout.PaymentGateway.Core
 {
     public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
     {

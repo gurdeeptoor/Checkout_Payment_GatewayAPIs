@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Checkout.PaymentGatway.Core
+namespace Checkout.PaymentGateway.Core
 {
     public class MerchantRepository : Repository<Merchant>, IMerchantRepository
     {

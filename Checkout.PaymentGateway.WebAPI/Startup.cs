@@ -1,5 +1,5 @@
 using Checkout.PaymentGateway.Data;
-using Checkout.PaymentGatway.Core;
+using Checkout.PaymentGateway.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

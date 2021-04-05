@@ -1,10 +1,11 @@
 ﻿using Checkout.PaymentGateway.Data;
+using CheckOut.Common;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Checkout.PaymentGatway.Core
+namespace Checkout.PaymentGateway.Core
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -13,16 +14,18 @@ namespace Checkout.PaymentGatway.Core
         private ICardRepository cards;
         private IMerchantRepository merchants;
         private ICurrencyRepository currencies;
-        public UnitOfWork(CheckOutDBContext CheckOutDBContext)
+        private BankAPISettings bankAPISettings;
+        public UnitOfWork(CheckOutDBContext CheckOutDBContext, BankAPISettings BankAPISettings)
         {
             checkOutDBContext = CheckOutDBContext;
+            bankAPISettings = BankAPISettings;
         }
 
         public ITransactionRepository Transactions
         {
             get
             {
-                if (transaction == null) transaction = new TransactionRepository(checkOutDBContext);
+                if (transaction == null) transaction = new TransactionRepository(checkOutDBContext, bankAPISettings);
                 return transaction;
             }
         }

@@ -1,4 +1,4 @@
-﻿using Checkout.PaymentGatway.Core;
+﻿using Checkout.PaymentGateway.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
