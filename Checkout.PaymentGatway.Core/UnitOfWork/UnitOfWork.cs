@@ -15,10 +15,10 @@ namespace Checkout.PaymentGateway.Core
         private IMerchantRepository merchants;
         private ICurrencyRepository currencies;
         private BankAPISettings bankAPISettings;
-        public UnitOfWork(CheckOutDBContext CheckOutDBContext, BankAPISettings BankAPISettings)
+        public UnitOfWork(CheckOutDBContext CheckOutDBContext, IOptions<BankAPISettings> BankAPISettingsConfig)
         {
             checkOutDBContext = CheckOutDBContext;
-            bankAPISettings = BankAPISettings;
+            bankAPISettings = BankAPISettingsConfig.Value;
         }
 
         public ITransactionRepository Transactions

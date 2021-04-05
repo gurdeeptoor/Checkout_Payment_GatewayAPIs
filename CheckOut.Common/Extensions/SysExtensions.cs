@@ -9,7 +9,7 @@ namespace CheckOut.Common
         public static string ToMaskedCardNumber(this string CardNumber)
         {
             if (!string.IsNullOrEmpty(CardNumber))
-                return $"xxxxxxxxxxxx{CardNumber.Substring(CardNumber.Length - 4, 4)}";
+                return $"XXXXXXXXXXXX{CardNumber.Substring(CardNumber.Length - 4, 4)}";
             return CardNumber;
         }
 

@@ -27,7 +27,7 @@ namespace Checkout.PaymentGateway.WebAPI
         public int ExpMonth { get; set; }
 
         [Required]
-        [Range(2021, 2099)]
+        [Range(21, 99)]
         public int ExpYear { get; set; }
 
         [Required]        

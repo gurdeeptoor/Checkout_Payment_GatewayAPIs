@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [CheckoutDB]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Database [CheckoutDB]    Script Date: 05/04/2021 19:25:16 ******/
 CREATE DATABASE [CheckoutDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -87,7 +87,7 @@ ALTER DATABASE SCOPED CONFIGURATION SET QUERY_OPTIMIZER_HOTFIXES = OFF;
 GO
 USE [CheckoutDB]
 GO
-/****** Object:  Table [dbo].[Bank]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[Bank]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -102,18 +102,23 @@ CREATE TABLE [dbo].[Bank](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CardDetail]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[CardDetail]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[CardDetail](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[CardNum] [nvarchar](19) COLLATE Latin1_General_BIN2 ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Randomized, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
-	[ExpMonth] [int] NOT NULL,
-	[ExpYear] [int] NOT NULL,
-	[HolderName] [nvarchar](250) COLLATE Latin1_General_BIN2 ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Randomized, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
-	[CVV] [nvarchar](3) COLLATE Latin1_General_BIN2 ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Randomized, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
+	[CardNum] [nvarchar](19) COLLATE Latin1_General_BIN2 ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Deterministic, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
+	[ExpMonth] [int] ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Deterministic, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
+	[ExpYear] [int] ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Deterministic, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
+	[HolderName] [nvarchar](250) COLLATE Latin1_General_BIN2 ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Deterministic, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
+	[CVV] [nvarchar](3) COLLATE Latin1_General_BIN2 ENCRYPTED WITH (COLUMN_ENCRYPTION_KEY = [CEK_Auto1], ENCRYPTION_TYPE = Deterministic, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256') NOT NULL,
+	[Address1] [nvarchar](50) NULL,
+	[Address2] [nvarchar](50) NULL,
+	[City] [nvarchar](50) NULL,
+	[State] [nvarchar](50) NULL,
+	[CountryCode] [nvarchar](3) NULL,
 	[IsEnabled] [bit] NOT NULL,
  CONSTRAINT [PK_CardDetail] PRIMARY KEY CLUSTERED 
 (
@@ -121,7 +126,7 @@ CREATE TABLE [dbo].[CardDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Currency]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[Currency]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -139,7 +144,7 @@ CREATE TABLE [dbo].[Currency](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Merchant]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[Merchant]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +160,7 @@ CREATE TABLE [dbo].[Merchant](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MerchantAPIKey]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[MerchantAPIKey]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -171,7 +176,7 @@ CREATE TABLE [dbo].[MerchantAPIKey](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Transaction]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[Transaction]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -181,7 +186,6 @@ CREATE TABLE [dbo].[Transaction](
 	[MerchantID] [int] NOT NULL,
 	[MerchantRef] [nvarchar](20) NULL,
 	[CardDetailID] [int] NOT NULL,
-	[BankID] [int] NOT NULL,
 	[CurrencyID] [int] NOT NULL,
 	[Amount] [decimal](10, 2) NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
@@ -195,7 +199,7 @@ CREATE TABLE [dbo].[Transaction](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TransactionHistory]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[TransactionHistory]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -211,7 +215,7 @@ CREATE TABLE [dbo].[TransactionHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TransactionStatus]    Script Date: 01/04/2021 09:14:12 ******/
+/****** Object:  Table [dbo].[TransactionStatus]    Script Date: 05/04/2021 19:25:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -230,11 +234,6 @@ ALTER TABLE [dbo].[MerchantAPIKey]  WITH CHECK ADD  CONSTRAINT [FK_MerchantAPIKe
 REFERENCES [dbo].[Merchant] ([ID])
 GO
 ALTER TABLE [dbo].[MerchantAPIKey] CHECK CONSTRAINT [FK_MerchantAPIKey_Merchant]
-GO
-ALTER TABLE [dbo].[Transaction]  WITH CHECK ADD  CONSTRAINT [FK_Transaction_Bank] FOREIGN KEY([BankID])
-REFERENCES [dbo].[Bank] ([BankID])
-GO
-ALTER TABLE [dbo].[Transaction] CHECK CONSTRAINT [FK_Transaction_Bank]
 GO
 ALTER TABLE [dbo].[Transaction]  WITH CHECK ADD  CONSTRAINT [FK_Transaction_CardDetail] FOREIGN KEY([CardDetailID])
 REFERENCES [dbo].[CardDetail] ([ID])

@@ -23,9 +23,10 @@ namespace Checkout.MockBank.WebAPI
 
             //Address details ommitted for brevity 
         }
-         
+
         /// <summary>
         /// Returns the Mock Data for Bank Cards held at Issuing Bank
+        /// Surce - https://www.paypalobjects.com/en_GB/vhelp/paypalmanager_help/credit_card_numbers.htm
         /// </summary>
         /// <returns></returns>
         public IEnumerable<BankCard> MockIssuingBankCards()
@@ -35,7 +36,7 @@ namespace Checkout.MockBank.WebAPI
             BankCards.Add(new BankCard
             {
                 //Active Card - Can be used for payments
-                CardNum = "4953089013607",
+                CardNum = "4111111111111111",
                 Cvv = "122",
                 ExpMonth = 12,
                 ExpYear = 21,
@@ -46,7 +47,7 @@ namespace Checkout.MockBank.WebAPI
             BankCards.Add(new BankCard
             {
                 //Used Card - Over Credit Limit - below zero balance
-                CardNum = "373485467448025",
+                CardNum = "4012888888881881",
                 Cvv = "222",
                 ExpMonth = 6,
                 ExpYear = 23,
@@ -57,7 +58,7 @@ namespace Checkout.MockBank.WebAPI
             BankCards.Add(new BankCard
             {
                 //Starter Card - not activated yet (IsEabled = false)
-                CardNum = "5201294442453002",
+                CardNum = "5555555555554444",
                 Cvv = "322",
                 ExpMonth = 1,
                 ExpYear = 25,

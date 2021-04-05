@@ -1,12 +1,17 @@
 ﻿using Checkout.PaymentGateway.Core;
 using Checkout.PaymentGateway.Data;
-using Microsoft.AspNetCore.Authorization;
+using CheckOut.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
+using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace Checkout.PaymentGateway.WebAPI.Controllers
 {
@@ -28,14 +33,18 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
         [Route("Add")]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionRequest transactionRequest)
         {
+            ;
             //Validate Transaction request  
             if (transactionRequest == null || !ModelState.IsValid)
                 return BadRequest("Invalid Transaction Parameters");
 
-            //Validate Merchant
-            var MerchantAPIKey = "57Dw2tFq9wF6"; //TODO - Get this from Auth Handler based on the API Key
+            //Get authenticated Merchant Ref from Identity Claims
+            var AuthenticatedMerchantRef =  User?.Identities?.First().Claims?.First().Value;
 
-            var Merchant = _unitOfWork.Merchants.GetMerchantByKey(MerchantAPIKey);
+            if (string.IsNullOrEmpty(AuthenticatedMerchantRef) || !Guid.TryParse(AuthenticatedMerchantRef, out var MerchantRefGUID))
+                return BadRequest("Invalid Merchant details");
+
+            var Merchant = _unitOfWork.Merchants.FindByCondition(x => x.MerchantRef == MerchantRefGUID && x.IsEnabled == true).FirstOrDefault();
             if (Merchant == null)
                 return BadRequest("Invalid Merchant details");
 
@@ -44,28 +53,90 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
                 return BadRequest("Invalid Card details");
 
             //Validate Currency
-            if (!_unitOfWork.Currencies.IsCurrenyValid(transactionRequest.CurrencyCode))
+            var currency = _unitOfWork.Currencies.FindByCondition(x => x.Code == transactionRequest.CurrencyCode.Trim() && x.IsEnabled == true).FirstOrDefault();
+
+            if (currency == null)
                 return BadRequest("Invalid Currency");
+
+            //Save Card Details
+            var CardDetails = _unitOfWork.Cards.FindByCondition(x => x.CardNum == transactionRequest.CardNumber.Trim()).FirstOrDefault();
+            if (CardDetails == null)
+            {
+                _logger.LogInformation("Card does not exist so adding new one");
+
+                var NewCard = new CardDetail
+                {
+                    CardNum = transactionRequest.CardNumber,
+                    Cvv = transactionRequest.CVV,
+                    ExpMonth = transactionRequest.ExpMonth,
+                    ExpYear = transactionRequest.ExpYear,
+                    HolderName = transactionRequest.CardHolderName,
+                    IsEnabled = true
+                };
+
+                _unitOfWork.Cards.Create(NewCard);
+                _unitOfWork.Save();
+                CardDetails = NewCard;
+            }
+            else
+            {
+                _logger.LogInformation("Card exists");
+            }
 
             //Process Bank Transactions
             var Trans = new Transaction
             {
-
+                Amount = transactionRequest.Amount,
+                CardDetailId = CardDetails.Id,
+                CreatedDate = DateTime.Now,
+                CurrencyId = currency.Id,
+                MerchantId = Merchant.Id,
+                MerchantRef = transactionRequest.TransactionRef,
+                TransactionStatusId = (int)TransactionStatusID.Pending,
+                SourceType = "PGW API",
+                TransactionId = Guid.NewGuid()               
             };
+
+            _unitOfWork.Transactions.Create(Trans);
+            _unitOfWork.Save();
+
+            Trans.CardDetail = CardDetails;
+            Trans.Currency = currency;
+
             //Make Bank API Call via Repository
-            var Transaction = await _unitOfWork.Transactions.ProcessAquiringBankTrasactionAsync(Trans);
+            var ProcessedTransaction = await _unitOfWork.Transactions.ProcessAquiringBankTrasactionAsync(Trans);
+
+            _logger.LogInformation($"Trsancation Ref -{ProcessedTransaction.TransactionId} Bank Ref - {ProcessedTransaction.BankRef} StatusID - {ProcessedTransaction.TransactionStatusId}");
 
             //Update the Transaction in DB
+            _unitOfWork.Transactions.Update(ProcessedTransaction);
+            _unitOfWork.Save();
+
+            if (ProcessedTransaction.TransactionStatusId != (int)TransactionStatusID.Completed)
+                return BadRequest("Transaction not sucessful");
+
+            //If all ok then return Transaction Response
+            var TransactionRes = ProcessedTransaction.ToTransactionResponse();
 
             //Send Response to Merchant
-            return Ok();
+            return Created(string.Empty, TransactionRes);
         }
 
         [HttpGet]
-        [Route("transactionRef")]
-        public async Task<IActionResult> GetTransaction([FromRoute] Guid transactionRef)
+        [Route("{TransactionId}")]
+        public async Task<IActionResult> GetTransaction([FromRoute] string TransactionId)
         {
-            return Ok();
+            //Validate Transaction request  
+            if (!Guid.TryParse(TransactionId.ToString(), out var TransactionGuId))
+                return BadRequest("Invalid Transaction Parameters");
+
+            //check if Transaction exists
+            var ProcessedTransaction = _unitOfWork.Transactions.GetTrasactionByRef(TransactionGuId.ToString());
+
+            if (ProcessedTransaction == null)
+                return NotFound("Transaction not found");
+
+            return Ok(ProcessedTransaction.ToTransactionResponse());
         }
     }
 }

@@ -47,10 +47,18 @@ namespace Checkout.PaymentGateway.Data
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Address1).HasMaxLength(50);
+
+                entity.Property(e => e.Address2).HasMaxLength(50);
+
                 entity.Property(e => e.CardNum)
                     .IsRequired()
                     .HasMaxLength(19)
                     .UseCollation("Latin1_General_BIN2");
+
+                entity.Property(e => e.City).HasMaxLength(50);
+
+                entity.Property(e => e.CountryCode).HasMaxLength(3);
 
                 entity.Property(e => e.Cvv)
                     .IsRequired()
@@ -62,6 +70,8 @@ namespace Checkout.PaymentGateway.Data
                     .IsRequired()
                     .HasMaxLength(250)
                     .UseCollation("Latin1_General_BIN2");
+
+                entity.Property(e => e.State).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Currency>(entity =>
@@ -126,8 +136,6 @@ namespace Checkout.PaymentGateway.Data
 
                 entity.Property(e => e.AuthCode).HasMaxLength(20);
 
-                entity.Property(e => e.BankId).HasColumnName("BankID");
-
                 entity.Property(e => e.CardDetailId).HasColumnName("CardDetailID");
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
@@ -141,12 +149,6 @@ namespace Checkout.PaymentGateway.Data
                 entity.Property(e => e.SourceType).HasMaxLength(50);
 
                 entity.Property(e => e.TransactionStatusId).HasColumnName("TransactionStatusID");
-
-                entity.HasOne(d => d.Bank)
-                    .WithMany(p => p.Transactions)
-                    .HasForeignKey(d => d.BankId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Transaction_Bank");
 
                 entity.HasOne(d => d.CardDetail)
                     .WithMany(p => p.Transactions)

@@ -19,4 +19,13 @@ namespace CheckOut.Common
         InsufficentFnds,
         None
     }
+
+    public enum TransactionStatusID : int
+    {
+        Pending = 1,
+        Completed = 2,
+        Cancelled = 3,
+        Rejected = 4,
+        Reversed = 5
+    }
 }

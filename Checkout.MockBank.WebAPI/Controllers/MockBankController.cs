@@ -37,7 +37,7 @@ namespace Checkout.MockBank.WebAPI.Controllers
                                                                           x.Cvv == BankTransactionRequest.Cvv &&
                                                                           x.ExpMonth == BankTransactionRequest.ExpMonth &&
                                                                           x.HolderName == BankTransactionRequest.HolderName &&
-                                                                          x.ExpYear == BankTransactionRequest.ExpYear);
+                                                                          x.ExpYear == BankTransactionRequest.ExpYear.To2DigitYear());
 
             if (CardDetails == null)
                 reasonCode = TransactionReasonCode.InvalidCardDetails;

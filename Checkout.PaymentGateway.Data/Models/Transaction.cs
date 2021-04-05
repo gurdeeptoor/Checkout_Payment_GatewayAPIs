@@ -16,7 +16,6 @@ namespace Checkout.PaymentGateway.Data
         public int MerchantId { get; set; }
         public string MerchantRef { get; set; }
         public int CardDetailId { get; set; }
-        public int BankId { get; set; }
         public int CurrencyId { get; set; }
         public decimal Amount { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -25,7 +24,6 @@ namespace Checkout.PaymentGateway.Data
         public Guid? BankRef { get; set; }
         public string SourceType { get; set; }
 
-        public virtual Bank Bank { get; set; }
         public virtual CardDetail CardDetail { get; set; }
         public virtual Currency Currency { get; set; }
         public virtual Merchant Merchant { get; set; }

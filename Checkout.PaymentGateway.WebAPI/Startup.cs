@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using CheckOut.Common;
 
 namespace Checkout.PaymentGateway.WebAPI
 {
@@ -25,7 +26,6 @@ namespace Checkout.PaymentGateway.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddControllers();
             services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddLogging();
             services.AddHttpContextAccessor();
@@ -35,9 +35,13 @@ namespace Checkout.PaymentGateway.WebAPI
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("BasicAuthentication", null);
 
-            services.AddScoped<IMerchantRepository, MerchantRepository>();            
+            services.AddScoped<IMerchantRepository, MerchantRepository>();
 
-            services.AddDbContext<CheckOutDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CheckOutDBContext")));          
+            services.AddDbContext<CheckOutDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CheckOutDBContext")));
+
+            //Pass sendgrid settings
+            IConfigurationSection bankAPISettings = Configuration.GetSection("BankAPISettings");
+            services.Configure<BankAPISettings>(bankAPISettings);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -73,10 +77,12 @@ namespace Checkout.PaymentGateway.WebAPI
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(name: "default",
+                            pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
         }
     }
 }

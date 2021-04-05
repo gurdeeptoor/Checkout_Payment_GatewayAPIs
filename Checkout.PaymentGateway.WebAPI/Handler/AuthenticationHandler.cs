@@ -15,10 +15,10 @@ namespace Checkout.PaymentGateway.WebAPI
     {
         private IMerchantRepository _merchantRepository;
         public AuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
-                                          ILoggerFactory logger,
-                                          UrlEncoder encoder,
-                                          ISystemClock clock,
-                                          IMerchantRepository merchantRepository) : base(options, logger, encoder, clock)
+                                     ILoggerFactory logger,
+                                     UrlEncoder encoder,
+                                     ISystemClock clock,
+                                     IMerchantRepository merchantRepository) : base(options, logger, encoder, clock)
         {
             _merchantRepository = merchantRepository;
         }

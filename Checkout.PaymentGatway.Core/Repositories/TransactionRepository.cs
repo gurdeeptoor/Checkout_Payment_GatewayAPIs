@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TransactionStatusID = CheckOut.Common.TransactionStatusID;
 
 namespace Checkout.PaymentGateway.Core
 {
@@ -23,7 +24,17 @@ namespace Checkout.PaymentGateway.Core
         public Transaction GetTrasactionByRef(string RefNo)
         {
             if (Guid.TryParse(RefNo, out var uRefNo))
-                return _checkOutDBContext.Transactions.FirstOrDefault(x => x.BankRef == uRefNo);
+            {
+                var Txn = _checkOutDBContext.Transactions.FirstOrDefault(x => x.TransactionId == uRefNo);
+
+                if (Txn != null)
+                {
+                    Txn.CardDetail = _checkOutDBContext.CardDetails.FirstOrDefault(x => x.Id == Txn.CardDetailId);
+                    Txn.Currency = _checkOutDBContext.Currencies.FirstOrDefault(x => x.Id == Txn.CurrencyId);
+
+                    return Txn;
+                }
+            }
             return null;
         }
 
@@ -38,7 +49,7 @@ namespace Checkout.PaymentGateway.Core
                 ExpYear = Transaction.CardDetail.ExpYear,
                 HolderName = Transaction.CardDetail.HolderName,
                 MerchantRef = Transaction.MerchantRef,
-                PaymentGatewayRef = "",
+                PaymentGatewayRef = "PGW01",
             };
 
             using (var client = new HttpClient())
@@ -57,17 +68,17 @@ namespace Checkout.PaymentGateway.Core
                     var resp = await result.Content.ReadAsStringAsync();
 
                     var bankTransactionResponse = JsonConvert.DeserializeObject<BankTransactionResponse>(resp);
-
                     //Process here 
-                    return new Transaction
-                    {
-                        AuthCode = bankTransactionResponse.AuthCode,
-                        BankRef = bankTransactionResponse.BankRef,
-                        TransactionStatusId = 2 //TODO - Use Enum
-                    };
+
+                    Transaction.AuthCode = bankTransactionResponse.AuthCode;
+                    Transaction.BankRef = bankTransactionResponse.BankRef;
+                    Transaction.TransactionStatusId = (int)TransactionStatusID.Completed;
+                    return Transaction;
                 }
 
-                return null;
+                //Additional status handling ommitted for brevity 
+                Transaction.TransactionStatusId = (int)TransactionStatusID.Rejected;
+                return Transaction;
             }
         }
     }
