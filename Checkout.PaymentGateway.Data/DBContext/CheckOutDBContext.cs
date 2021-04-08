@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -12,8 +10,7 @@ namespace Checkout.PaymentGateway.Data
         {
         }
 
-        public CheckOutDBContext(DbContextOptions<CheckOutDBContext> options)
-            : base(options)
+        public CheckOutDBContext(DbContextOptions<CheckOutDBContext> options) : base(options)
         {
         }
         public virtual DbSet<CardDetail> CardDetails { get; set; }
