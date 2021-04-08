@@ -38,6 +38,33 @@ namespace Checkout.PaymentGateway.Core
             return null;
         }
 
+        public IEnumerable<Transaction> GetTrasactionsByMerchantRef(string MerchantRefNo)
+        {          
+            //This can be refactored to finetune by caching or join 
+            var cards = _checkOutDBContext.CardDetails.Where(x => x.IsEnabled == true).AsEnumerable();
+            var currencies = _checkOutDBContext.Currencies.Where(x => x.IsEnabled == true).AsEnumerable();
+
+            if (Guid.TryParse(MerchantRefNo, out var MuRefNo)) 
+            {
+                var Mid = _checkOutDBContext.Merchants.FirstOrDefault(x => x.MerchantRef == MuRefNo);
+
+                if (Mid == null)
+                    return null;
+
+                var Txns = _checkOutDBContext.Transactions.Where(x => x.MerchantId == Mid.Id).ToList();
+
+                foreach (var txn in Txns)
+                {
+                    txn.CardDetail = cards.FirstOrDefault(x => x.Id == txn.CardDetailId);
+                    txn.Currency = currencies.FirstOrDefault(x => x.Id == txn.CurrencyId);
+                }
+
+                return Txns.OrderBy(x => x.CreatedDate).AsEnumerable();
+            }
+
+            return null;
+        }
+
         public async Task<Transaction> ProcessAquiringBankTrasactionAsync(Transaction Transaction)
         {
             var requestData = new BankTransactionRequest
@@ -49,7 +76,7 @@ namespace Checkout.PaymentGateway.Core
                 ExpYear = Transaction.CardDetail.ExpYear,
                 HolderName = Transaction.CardDetail.HolderName,
                 MerchantRef = Transaction.MerchantRef,
-                PaymentGatewayRef = "PGW01",
+                PaymentGatewayRef =SysExtensions.RandomString(6),
             };
 
             using (var client = new HttpClient())

@@ -10,5 +10,6 @@ namespace Checkout.PaymentGateway.Core
     {
         Transaction GetTrasactionByRef(string RefNo);
         Task<Transaction> ProcessAquiringBankTrasactionAsync(Transaction Transaction);
+        IEnumerable<Transaction> GetTrasactionsByMerchantRef(string MerchantRefNo);
     }
 }

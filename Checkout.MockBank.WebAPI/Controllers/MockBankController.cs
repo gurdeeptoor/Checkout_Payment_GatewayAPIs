@@ -37,7 +37,8 @@ namespace Checkout.MockBank.WebAPI.Controllers
                                                                           x.Cvv == BankTransactionRequest.Cvv &&
                                                                           x.ExpMonth == BankTransactionRequest.ExpMonth &&
                                                                           x.HolderName == BankTransactionRequest.HolderName &&
-                                                                          x.ExpYear == BankTransactionRequest.ExpYear.To2DigitYear());
+                                                                          x.ExpYear == BankTransactionRequest.ExpYear.To2DigitYear() && 
+                                                                          x.HolderName.Trim() == BankTransactionRequest.HolderName.Trim());
 
             if (CardDetails == null)
                 reasonCode = TransactionReasonCode.InvalidCardDetails;
@@ -53,7 +54,7 @@ namespace Checkout.MockBank.WebAPI.Controllers
                 //Other internal Bank Payment processing logic goes here 
                 CardDetails.RemainingBalance -= BankTransactionRequest.Amount;
                 reasonCode = TransactionReasonCode.PaymentOK;
-                authCode = "AUTH001";
+                authCode = SysExtensions.RandomString(8);
             }
 
             var bankResponse = new BankTransactionResponse()

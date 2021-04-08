@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Checkout.PaymentGateway.Core
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private CheckOutDBContext checkOutDBContext; 
         private ITransactionRepository transaction;
@@ -56,6 +56,27 @@ namespace Checkout.PaymentGateway.Core
                 if (currencies == null) currencies = new CurrencyRepository(checkOutDBContext);
                 return currencies;
             }
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing) 
+                {
+                    checkOutDBContext.Dispose();
+                }
+            }
+
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public void Save()

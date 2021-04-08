@@ -2,12 +2,25 @@
 using CheckOut.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Checkout.PaymentGateway.WebAPI
 {
     public static class TransactionExtensions
     {
+        public static IEnumerable<TransactionResponse> ToTransactionResponse(this IEnumerable<Transaction> transactions)
+        {
+            List<TransactionResponse> Txns = new List<TransactionResponse>();
+
+            foreach (var txn in transactions)
+            {
+                Txns.Add(txn.ToTransactionResponse());
+            }
+
+            return Txns.AsEnumerable();
+        }
+
         public static TransactionResponse ToTransactionResponse(this Transaction transaction)
         {
             return new TransactionResponse
@@ -26,7 +39,8 @@ namespace Checkout.PaymentGateway.WebAPI
                 ExpYear = transaction.CardDetail.ExpYear,
                 State = string.Empty,
                 Status = Enum.GetName(typeof(TransactionStatusID), transaction.TransactionStatusId),
-                TransactionRef = Guid.Parse(transaction.TransactionId.ToString())
+                TransactionId = Guid.Parse(transaction.TransactionId.ToString()), 
+                MerchantRef = transaction.MerchantRef
             };
         }
     }

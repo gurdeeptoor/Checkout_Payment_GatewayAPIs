@@ -25,5 +25,9 @@
     <ProjectReference Include="..\Checkout.PaymentGatway.Core\Checkout.PaymentGateway.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 
 </Project>

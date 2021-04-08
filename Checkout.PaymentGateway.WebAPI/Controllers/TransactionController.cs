@@ -30,7 +30,6 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionRequest transactionRequest)
         {
             ;
@@ -81,6 +80,10 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
             else
             {
                 _logger.LogInformation("Card exists");
+
+                //validate if the supplied Name & details matches with previously saved Card
+                if ((CardDetails.HolderName != transactionRequest.CardHolderName))
+                    return BadRequest("Invalid Card details");                 
             }
 
             //Process Bank Transactions
@@ -109,8 +112,10 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
             _logger.LogInformation($"Trsancation Ref -{ProcessedTransaction.TransactionId} Bank Ref - {ProcessedTransaction.BankRef} StatusID - {ProcessedTransaction.TransactionStatusId}");
 
             //Update the Transaction in DB
-            _unitOfWork.Transactions.Update(ProcessedTransaction);
+            _unitOfWork.Transactions.Update(ProcessedTransaction);   
             _unitOfWork.Save();
+
+            //TODO - Save the Transaction history record here for Audit purposes - Useful for delayed transactions
 
             if (ProcessedTransaction.TransactionStatusId != (int)TransactionStatusID.Completed)
                 return BadRequest("Transaction not sucessful");
@@ -137,6 +142,24 @@ namespace Checkout.PaymentGateway.WebAPI.Controllers
                 return NotFound("Transaction not found");
 
             return Ok(ProcessedTransaction.ToTransactionResponse());
+        }
+         
+        [HttpGet]
+        public async Task<IActionResult> GetAllTransactions()
+        {
+            //Get authenticated Merchant Ref from Identity Claims
+            var AuthenticatedMerchantRef = User?.Identities?.First().Claims?.First().Value;
+
+            if (string.IsNullOrEmpty(AuthenticatedMerchantRef) || !Guid.TryParse(AuthenticatedMerchantRef, out var MerchantRefGUID))
+                return BadRequest("Invalid Merchant details");
+
+            //check if Transaction exists
+            var Transactions = _unitOfWork.Transactions.GetTrasactionsByMerchantRef(MerchantRefGUID.ToString());
+
+            if (Transactions == null)
+                return NotFound("Transactions not found");
+
+            return Ok(Transactions.ToTransactionResponse());
         }
     }
 }

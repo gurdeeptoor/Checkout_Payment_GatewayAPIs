@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Checkout.PaymentGateway.WebAPI
+namespace CheckOut.Common
 {
     public class TransactionResponse
     { 
-        public Guid TransactionRef { get; set; }
+        public Guid TransactionId { get; set; }
+        public string MerchantRef { get; set; }
         public decimal Amount { get; set; }
         public string CardNumber { get; set; }
         public int ExpMonth { get; set; }

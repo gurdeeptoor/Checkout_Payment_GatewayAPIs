@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGateway.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.MockBank.WebAPI", "Checkout.MockBank.WebAPI\Checkout.MockBank.WebAPI.csproj", "{1893D71E-98B3-4F89-97D3-00C4BEE86016}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.IntegrationTests", "Checkout.PaymentGatway.IntegrationTests\Checkout.PaymentGatway.IntegrationTests.csproj", "{D3FF3E6D-D9AC-43FB-BFA9-C085E51B9EB6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checkout.PaymentGatway.UnitTests", "Checkout.PaymentGatway.UnitTests\Checkout.PaymentGatway.UnitTests.csproj", "{26F3C6A9-98AB-4131-8860-701DAF2B275F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckOut.Common", "CheckOut.Common\CheckOut.Common.csproj", "{0454623E-CD11-4898-A6EA-498D6F77CFA7}"
@@ -39,10 +37,6 @@ Global
 		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1893D71E-98B3-4F89-97D3-00C4BEE86016}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3FF3E6D-D9AC-43FB-BFA9-C085E51B9EB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3FF3E6D-D9AC-43FB-BFA9-C085E51B9EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3FF3E6D-D9AC-43FB-BFA9-C085E51B9EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3FF3E6D-D9AC-43FB-BFA9-C085E51B9EB6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26F3C6A9-98AB-4131-8860-701DAF2B275F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26F3C6A9-98AB-4131-8860-701DAF2B275F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26F3C6A9-98AB-4131-8860-701DAF2B275F}.Release|Any CPU.ActiveCfg = Release|Any CPU

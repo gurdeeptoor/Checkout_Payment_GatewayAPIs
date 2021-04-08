@@ -1,0 +1,51 @@
+1 - Post Transaction via Payment Gateway
+-------------------------------------------------------------------------------------------
+
+curl --location --request POST 'https://localhost:44354/v1/Transactions' \
+--header 'X-API-KEY: mdAYungKPbmW' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "transactionRef": "REF001",
+  "currencyCode": "USD",
+  "amount": 120.0,
+  "cardNumber": "4111111111111111",
+  "expMonth": 12,
+  "expYear": 21,
+  "cardHolderName": "Mr Checkout 1",
+  "cvv": "122",
+  "address1": "Address 1",
+  "address2": "address1",
+  "city": "Rochester",
+  "state": "Kent",
+  "countryCode": "GB"
+}'
+
+2 - Get Transaction by ID via Payment Gateway
+-------------------------------------------------------------------------------------------
+
+curl --location --request GET 'https://localhost:44354/v1/Transactions/c18363a1-7822-4c58-9614-e3bb1ed1003c' \
+--header 'X-API-KEY: mdAYungKPbmW' \
+--data-raw ''
+
+3 - Get all Transactions via Payment Gateway
+-------------------------------------------------------------------------------------------
+
+curl --location --request GET 'https://localhost:44354/v1/Transactions' \
+--header 'X-API-KEY: mdAYungKPbmW' \
+--data-raw ''
+
+4 - Post Payment to Mock Aquiring Bank
+-------------------------------------------------------------------------------------------
+
+curl --location --request POST 'https://localhost:44390v1/BankTransactions/payment' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "MerchantRef": "REF001",
+  "PaymentGatewayRef": "PGW01",
+  "amount": 100,
+  "CardNum": "4111111111111111",
+  "expMonth": 12,
+  "expYear": 21,
+  "HolderName": "Mr Checkout 1",
+  "cvv": "122"
+}'

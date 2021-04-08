@@ -1,0 +1,168 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Checkout PaymentGateway API V1 by Gurdeep Singh",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/HealthCheck": {
+      "get": {
+        "tags": [
+          "Anonymous"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/v1/Transactions": {
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/v1/Transactions/{TransactionId}": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "name": "TransactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TransactionRequest": {
+        "required": [
+          "address1",
+          "address2",
+          "amount",
+          "cardHolderName",
+          "cardNumber",
+          "city",
+          "countryCode",
+          "currencyCode",
+          "cvv",
+          "expMonth",
+          "expYear",
+          "state"
+        ],
+        "type": "object",
+        "properties": {
+          "transactionRef": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "currency"
+          },
+          "currencyCode": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "cardNumber": {
+            "maxLength": 19,
+            "minLength": 16,
+            "type": "string",
+            "format": "credit-card"
+          },
+          "expMonth": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "expYear": {
+            "maximum": 99,
+            "minimum": 21,
+            "type": "integer",
+            "format": "int32"
+          },
+          "cardHolderName": {
+            "type": "string"
+          },
+          "cvv": {
+            "maxLength": 3,
+            "minLength": 1,
+            "type": "string"
+          },
+          "address1": {
+            "maxLength": 50,
+            "type": "string"
+          },
+          "address2": {
+            "maxLength": 50,
+            "type": "string"
+          },
+          "city": {
+            "maxLength": 50,
+            "type": "string"
+          },
+          "state": {
+            "maxLength": 50,
+            "type": "string"
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

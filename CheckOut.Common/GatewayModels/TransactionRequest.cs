@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Checkout.PaymentGateway.WebAPI
+namespace CheckOut.Common
 {
     public class TransactionRequest
     {

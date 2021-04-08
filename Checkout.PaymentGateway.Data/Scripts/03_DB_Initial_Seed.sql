@@ -12,15 +12,6 @@ INSERT INTO [dbo].[Merchant]
 		   (NEWID(),'Merchant-03',1)
 GO
 
-INSERT INTO [dbo].[Bank]
-           ([Name]
-           ,[IsEnabled])
-     VALUES
-           ('Model-Bank-01',1),
-		   ('Model-Bank-02',1),
-		   ('Model-Bank-03',1)
-GO
-
 INSERT INTO [dbo].[Currency]
            ([Name]
            ,[Code]
@@ -41,10 +32,6 @@ INSERT INTO [dbo].[MerchantAPIKey]
            (1,'57Dw2tFq9wF6' ,1),
 		   (1,'mdAYungKPbmW' ,2),
 		   (1,'ArqTZ3SLlcd3' ,3)
-GO
-
-
-USE [CheckoutDB]
 GO
 
 INSERT INTO [dbo].[TransactionStatus]

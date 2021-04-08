@@ -16,8 +16,6 @@ namespace Checkout.PaymentGateway.Data
             : base(options)
         {
         }
-
-        public virtual DbSet<Bank> Banks { get; set; }
         public virtual DbSet<CardDetail> CardDetails { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<Merchant> Merchants { get; set; }
@@ -28,18 +26,7 @@ namespace Checkout.PaymentGateway.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
-            modelBuilder.Entity<Bank>(entity =>
-            {
-                entity.ToTable("Bank");
-
-                entity.Property(e => e.BankId).HasColumnName("BankID");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200);
-            });
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");          
 
             modelBuilder.Entity<CardDetail>(entity =>
             {

@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "c29f22fe-7eb0-4b70-ac4a-a1165c8664df",
+		"name": "CheckOutAPIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PaymentAPIUri}}/v1/HealthCheck",
+					"host": [
+						"{{PaymentAPIUri}}"
+					],
+					"path": [
+						"v1",
+						"HealthCheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post New Payment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 201\", function ()\r",
+							"{\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"TransactionId\", data.transactionId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{APIKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"transactionRef\": \"REF001\",\r\n  \"currencyCode\": \"USD\",\r\n  \"amount\": 120.0,\r\n  \"cardNumber\": \"4111111111111111\",\r\n  \"expMonth\": 12,\r\n  \"expYear\": 21,\r\n  \"cardHolderName\": \"Mr Checkout 1\",\r\n  \"cvv\": \"122\",\r\n  \"address1\": \"Address 1\",\r\n  \"address2\": \"address1\",\r\n  \"city\": \"Rochester\",\r\n  \"state\": \"Kent\",\r\n  \"countryCode\": \"GB\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PaymentAPIUri}}/v1/Transactions",
+					"host": [
+						"{{PaymentAPIUri}}"
+					],
+					"path": [
+						"v1",
+						"Transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Payment by Ref",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{APIKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PaymentAPIUri}}/v1/Transactions/{{TransactionId}}",
+					"host": [
+						"{{PaymentAPIUri}}"
+					],
+					"path": [
+						"v1",
+						"Transactions",
+						"{{TransactionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Payments By Merchant",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{APIKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PaymentAPIUri}}/v1/Transactions",
+					"host": [
+						"{{PaymentAPIUri}}"
+					],
+					"path": [
+						"v1",
+						"Transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Mock Bank Payment",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"MerchantRef\": \"REF001\",\r\n  \"PaymentGatewayRef\": \"PGW01\",\r\n  \"amount\": 100,\r\n  \"CardNum\": \"4111111111111111\",\r\n  \"expMonth\": 12,\r\n  \"expYear\": 21,\r\n  \"HolderName\": \"Mr Checkout 1\",\r\n  \"cvv\": \"122\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MockBankUri}}/v1/BankTransactions/payment",
+					"host": [
+						"{{MockBankUri}}"
+					],
+					"path": [
+						"v1",
+						"BankTransactions",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
