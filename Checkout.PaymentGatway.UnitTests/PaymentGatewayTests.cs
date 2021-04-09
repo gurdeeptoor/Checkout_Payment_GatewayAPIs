@@ -1,14 +1,15 @@
-using Checkout.PaymentGateway.Core;
-using Checkout.PaymentGateway.Data;
-using Moq;
-using Newtonsoft.Json.Linq;
-using Xunit;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
+using Checkout.PaymentGateway.Core;
+using Checkout.PaymentGateway.Data;
+using Checkout.PaymentGateway.WebAPI.Controllers;
+using CheckOut.Common;
+using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
 namespace Checkout.PaymentGatway.UnitTests
 {
@@ -20,15 +21,26 @@ namespace Checkout.PaymentGatway.UnitTests
 
         #region "Test Data"
 
-        public Transaction ValidInputTransaction()
+        public TransactionRequest ValidInputTransaction()
         {
-            return new Transaction
+            var ValidCard = TestCards().FirstOrDefault();
+            var ValidCurrency = TestCurrencies().FirstOrDefault();
+
+            return new TransactionRequest
             {
-                Amount = 120,
-                CardDetail = TestCards().First(),
-                CreatedDate = DateTime.Now,
-                Currency = TestCurrencies().First(),
-                Merchant = TestMerchants().First()
+                CardNumber = ValidCard.CardNum,
+                Address1 = ValidCard.Address1,
+                Address2 = ValidCard.Address2,
+                Amount = 2,
+                CardHolderName = ValidCard.HolderName,
+                City = ValidCard.City,
+                CountryCode = ValidCard.CountryCode,
+                CurrencyCode = ValidCurrency.Code,
+                CVV = ValidCard.Cvv,
+                ExpMonth = ValidCard.ExpMonth,
+                ExpYear = ValidCard.ExpYear,
+                State = ValidCard.State,
+                TransactionRef = "Test1"
             };
         }
 
@@ -298,6 +310,33 @@ namespace Checkout.PaymentGatway.UnitTests
 
                 Assert.Null(actual);
             }
+        }
+
+        #endregion
+
+        #region "Transaction Contoller Tests"
+
+        [Fact(Skip ="Not Completed Yet")]        
+        public void Test_Transaction_Controller_Post_Valid_Transaction()
+        {
+            //var transactionRequest = ValidInputTransaction();
+
+            //using (var mock = AutoMock.GetLoose())
+            //{
+            //    var uowMock = mock.Mock<IUnitOfWork>();
+            //    var loggerMock = mock.Create<ILogger>();
+            //    var mKey = TestMerchantKeys().FirstOrDefault().Apikey;
+
+            //    uowMock.Setup(u => u.Transactions.GetTrasactionByRef(It.IsAny<string>())).Returns(TestTransaction().FirstOrDefault(x => x.TransactionId == TxnGuid));
+            //    //set up repos
+            //    uowMock.Setup(u => u.Merchants.GetMerchantByKey(MerchantAPIKey)).Returns(merchant);
+
+            //    var transactionController = new TransactionController((ILogger<TransactionController>)loggerMock, (IUnitOfWork)uowMock);
+
+            //    var actual = transactionController.PostTransaction(transactionRequest);
+
+            //    Assert.Null(actual);              
+            //}
         }
 
         #endregion

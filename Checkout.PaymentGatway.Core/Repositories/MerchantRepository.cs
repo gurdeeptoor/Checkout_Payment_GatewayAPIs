@@ -1,4 +1,5 @@
 ﻿using Checkout.PaymentGateway.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,10 @@ namespace Checkout.PaymentGateway.Core
         {
             if (!(string.IsNullOrEmpty(MerchantAPIKey)))
             {
-                var xx = _checkOutDBContext.MerchantApikeys.Where(x => x.Apikey == MerchantAPIKey && x.IsEnabled == true).FirstOrDefault();
+                var merchantKeys = _checkOutDBContext.MerchantApikeys.Include("Merchant").Where(x => x.Apikey == MerchantAPIKey && x.IsEnabled == true).FirstOrDefault();
 
-                if (xx != null)
-                    return _checkOutDBContext.Merchants.Where(x => x.Id == xx.MerchantId).FirstOrDefault();
+                if (merchantKeys != null)
+                    return merchantKeys.Merchant;
 
             }
             return null;
