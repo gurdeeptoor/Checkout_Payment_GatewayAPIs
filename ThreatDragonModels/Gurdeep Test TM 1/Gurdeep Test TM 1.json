@@ -141,6 +141,7 @@
                   "description": "A generic elevation threat"
                 }
               ],
+              "privilegeLevel": "Level 1",
               "attrs": {
                 ".element-shape": {
                   "class": "element-shape hasOpenThreats isInScope"
@@ -166,6 +167,10 @@
                 {
                   "x": 311,
                   "y": 126
+                },
+                {
+                  "x": 331,
+                  "y": 135
                 }
               ],
               "id": "0e53eed5-f188-4430-b33d-0dd9f7c1e6e8",
